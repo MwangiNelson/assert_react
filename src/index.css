@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&family=Teko:wght@500&display=swap");
+:root {
+  --primary-green: #0d2329;
+  --secondary-green: #9acd32;
+
+  --primary-font: "Josefin Sans", sans-serif;
+  --secondary-font: "Teko", sans-serif;
+}
+
+* {
+  font-family: var(--secondary-font);
+}
+body {
+  width: 100vw;
+  max-width: 100%;
+}
+
+.bg-primary-green {
+  background-color: var(--primary-green);
+}
+.bg-secondary-green {
+  background-color: var(--secondary-green);
+}
+
+.img-contain {
+  object-fit: contain;
+}
+.img-cover {
+  object-fit: cover;
+}
+.text-bold {
+  font-weight: bold !important;
+}
+.logo-img {
+  width: 15vw;
+  height: 12vh;
+  object-fit: cover;
+}
+.vh-75 {
+  height: 75vh !important;
+}
+.font-primary {
+  font-family: var(--primary-font) !important;
+}
+.z-top {
+  z-index: 1000;
+}
+
+.app-input {
+  background-color: var(--primary-green);
+  color: white;
+  border: none;
+  outline: none;
+  border-radius: 0;
+  font-size: 1.35em;
+  padding-inline: 1em;
+}
+.close-btn {
+  width: 4vw;
+  height: 4vw;
+  position: absolute;
+  background: transparent;
+  border: 0;
+  outline: none;
+  top: 5vw;
+  right: 25%;
+  border-radius: 3px;
+  padding: 0.5em;
+  transition: all ease 0.5s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+.animate-in {
+  animation: animateEntry 0.5s ease forwards;
+  transition: all ease 0.5s;
+}
+.animate-exit {
+  animation: animateExit 1s ease forwards;
+  transition: all ease 1s;
+}
+
+@keyframes animateEntry {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes animateExit {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer !important;
+}
+
+.user-img {
+  width: 3vw;
+  height: 3vw;
+  object-fit: contain;
+}
