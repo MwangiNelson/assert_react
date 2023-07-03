@@ -8,11 +8,43 @@ export const AppProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [protests, setProtests] = useState(null)
+    const [visible, setVisible] = useState(false)
 
     useEffect(() => {
         setIsAuthenticated(userData !== null);
     }, [userData]);
 
+    useEffect(() => {
+        const storedUserData = sessionStorage.getItem('userData');
+        if (storedUserData) {
+            setUserData(JSON.parse(storedUserData));
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (userData) {
+            sessionStorage.setItem('userData', JSON.stringify(userData));
+            setIsAuthenticated(true);
+        } else {
+            sessionStorage.removeItem('userData');
+            setIsAuthenticated(false);
+        }
+    }, [userData]);
+
+    useEffect(() => {
+        const handleBeforeUnload = () => {
+            if (userData) {
+                sessionStorage.setItem('userData', userData);
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
     const registerUser = async (username, email, password) => {
         const url = `http://127.0.0.1:8000/api/user/register`;
@@ -76,17 +108,7 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const fetchProtests = async () => {
-        const url = 'http://127.0.0.1:8000/api/protests';
-        try {
-            const response = await axios.get(url);
-            const data = response.data.data;
-            setProtests(data);
-            console.log('Protest fetch successful:', data);
-        } catch (error) {
-            console.log('Error:', error);
-        }
-    };
+
 
     const fetchMyProtests = async (userToken) => {
         const url = `http://127.0.0.1:8000/api/protests/${userToken}`;
@@ -120,8 +142,8 @@ export const AppProvider = ({ children }) => {
         registerUser,
         loginUser,
         fetchMyProtests,
-        fetchProtests,
-        protests
+        visible,
+        setVisible
     };
 
     return (
