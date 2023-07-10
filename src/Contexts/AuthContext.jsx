@@ -10,6 +10,7 @@ export const AppProvider = ({ children }) => {
     const [protests, setProtests] = useState(null)
     const [visible, setVisible] = useState(false)
 
+
     useEffect(() => {
         setIsAuthenticated(userData !== null);
     }, [userData]);
@@ -108,8 +109,6 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-
-
     const fetchMyProtests = async (userToken) => {
         const url = `http://127.0.0.1:8000/api/protests/${userToken}`;
         try {
@@ -134,7 +133,68 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    const postProtests = async (protestData) => {
+        const url = `http://127.0.0.1:8000/api/protests`;
 
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(protestData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUserData(data.data.user);
+                console.log('Post successful:', data);
+
+                return true
+            } else {
+                console.log('Registration failed.');
+                return false
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            return false
+        }
+    };
+
+    const registerVolunteer = async (volunteerData) => {
+        const url = `http://127.0.0.1:8000/api/volunteer/register`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(volunteerData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                console.log('Registration successful:', data.message);
+
+                return true
+            } else {
+                console.log('Registration failed.');
+                return false
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            return false
+        }
+    }
+
+
+    const logout = () => {
+        setUserData(null)
+        setIsAuthenticated(false)
+        sessionStorage.removeItem('userData');
+    }
 
     const contextValue = {
         userData,
@@ -143,7 +203,11 @@ export const AppProvider = ({ children }) => {
         loginUser,
         fetchMyProtests,
         visible,
-        setVisible
+        setVisible,
+        postProtests,
+        registerVolunteer,
+        logout
+
     };
 
     return (

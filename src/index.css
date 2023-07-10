@@ -14,7 +14,12 @@ body {
   width: 100vw;
   max-width: 100%;
 }
-
+.text-secondary-green {
+  color: var(--secondary-green);
+}
+.text-bold {
+  font-weight: bold !important;
+}
 .bg-primary-green {
   background-color: var(--primary-green);
 }
@@ -81,6 +86,24 @@ body {
 .animate-exit {
   animation: animateExit 1s ease forwards;
   transition: all ease 1s;
+}
+.jcc {
+  justify-content: center;
+}
+.tac {
+  text-align: center;
+}
+.ais {
+  align-items: start;
+}
+.jcs {
+  justify-content: start;
+}
+.aic {
+  align-items: center;
+}
+.tas {
+  text-align: start;
 }
 
 @keyframes animateEntry {

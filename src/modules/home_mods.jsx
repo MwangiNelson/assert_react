@@ -3,8 +3,6 @@ import { AppContext } from '../Contexts/AuthContext'
 import { Link } from 'react-router-dom'
 
 export const Landing = () => {
-  const takeToPostPage = () => {
-  }
 
 
   const { isAuthenticated } = useContext(AppContext)
@@ -16,12 +14,12 @@ export const Landing = () => {
           <h2 className='display-1'>We vouch for <br /> <b className='text-primary'>EQUITY AND JUSTICE</b> </h2>
           <p className='font-primary'>We invite you to join us on our journey to create a better world.</p>
           <div className="d-flex flex-row w-100 justify-content-start gap-4">
-            <Link to={isAuthenticated ? '/protests' : '/auth'}>
-              <button className="btn btn-outline-success rounded-0 px-4 py-2 fs-2" onClick={!isAuthenticated ? takeToPostPage() : toggleLogin()} >
+            <Link to={isAuthenticated ? '/post-protests' : '/auth'}>
+              <button className="btn btn-outline-success rounded-0 px-4 py-2 fs-2" >
                 SCHEDULE A PROTEST
               </button>
             </Link>
-            <Link to={isAuthenticated ? '/protests' : '/auth'}>
+            <Link to={'/register-volunteer'}>
               <button className="btn btn-outline-primary rounded-0 px-4 py-2 fs-2">
                 BECOME A PEACE USHER
               </button>
