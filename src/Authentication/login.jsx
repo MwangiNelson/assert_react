@@ -33,7 +33,7 @@ function Login(props) {
           <i className="fa-solid fa-lock text-light fs-3"></i>
           <input type="password" ref={passwordRef} className="app-input w-100" placeholder='Password *' />
         </div>
-        <p className='font-primary d-flex flex-row gap-2'>Don't have an account? <p className='text-info font-primary cursor-pointer' onClick={props.toggleAuth}>Sign up here.</p></p>
+        <span className='font-primary d-flex flex-row gap-2'>Don't have an account? <p className='text-info font-primary cursor-pointer' onClick={props.toggleAuth}>Sign up here.</p></span>
 
         <button className="btn btn-primary fs-3 w-50" onClick={handleLogin}>
           SUBMIT

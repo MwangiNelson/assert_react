@@ -26,6 +26,9 @@ body {
 .bg-secondary-green {
   background-color: var(--secondary-green);
 }
+.animate-down {
+  transition: all ease 0.5s;
+}
 
 .img-contain {
   object-fit: contain;
@@ -104,6 +107,9 @@ body {
 }
 .tas {
   text-align: start;
+}
+.jsb {
+  justify-content: space-between;
 }
 
 @keyframes animateEntry {

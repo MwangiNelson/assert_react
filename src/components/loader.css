@@ -9,8 +9,14 @@
   position: absolute;
   left: 8px;
   width: 16px;
-  background: #fff;
+
   animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook-white div {
+  background: white;
+}
+.lds-facebook-green div {
+  background: #0d2329;
 }
 .lds-facebook div:nth-child(1) {
   left: 8px;

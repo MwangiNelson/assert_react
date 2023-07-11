@@ -79,6 +79,32 @@ export const AppProvider = ({ children }) => {
             return false
         }
     };
+    const registerUserAdmin = async (userData) => {
+        const url = `http://127.0.0.1:8000/api/user/register`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Registration successful:', data.user.username);
+
+                return true
+            } else {
+                console.log('Registration failed.');
+                return false
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            return false
+        }
+    };
 
     const loginUser = async (email, password) => {
         const url = `http://127.0.0.1:8000/api/user/login`;
@@ -200,6 +226,7 @@ export const AppProvider = ({ children }) => {
         userData,
         isAuthenticated,
         registerUser,
+        registerUserAdmin,
         loginUser,
         fetchMyProtests,
         visible,

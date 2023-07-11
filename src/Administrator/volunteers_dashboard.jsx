@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { volunteerCategories } from './data';
 import { AppContext } from '../Contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 function VolunteerDashboard() {
     const [ushers, setUshers] = useState([]);
@@ -69,6 +70,10 @@ function VolunteerDashboard() {
         try {
             const response = await fetch(url, {
                 method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify({
                     id: usherId,
                     is_validated: !is_validated,
@@ -106,11 +111,11 @@ function VolunteerDashboard() {
     const DashCard = (props) => {
         return (
             <div
-                className='w-100 gap-3 btn btn-light rounded-2 border-secondary d-flex flex-column pt-2 px-4 tas ais'
+                className={`w-100 gap-3 btn btn-light rounded-2 border-secondary d-flex flex-column pt-2 px-4 tas ais ${tabIndex == props.index ? 'bg-secondary' : ''}`}
                 onClick={props.method}
             >
                 <h3 className='fs-3 w-100'>{props.title}</h3>
-                <h1 className='display-5 text-secondary-green text-bold'>{countValues[props.index]}</h1>
+                <h1 className={`display-5 ${tabIndex == props.index ? 'text-secondary-green' : 'text-dark'} text-bold`}>{countValues[props.index]}</h1>
             </div>
         );
     };
@@ -121,7 +126,12 @@ function VolunteerDashboard() {
 
     return (
         <div className='w-75 d-flex flex-column py-4'>
-            <h1 className='display-3'>VOLUNTEERS</h1>
+
+            <div className="w-100 d-flex flex-row aic jsb">
+                <h2 className="display-3 pt-3">VOLUNTEERS</h2>
+                <Link to={'/register-volunteer'}>            <button className="btn btn-outline-dark rounded-1">ADD NEW VOLUNTEER</button>
+                </Link>
+            </div>
             <div className='d-flex flex-row py-4 gap-4'>
                 {volunteerCategories.map((category, index) => {
                     return (

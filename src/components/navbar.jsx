@@ -11,12 +11,25 @@ const Navbar = () => {
                 <img src="images/app_logo.png" alt="" className='logo-img' />
                 <div className="w-75 d-flex flex-row align-items-center justify-content-around align-items-center gap-4">
                     <div className="nav-links d-flex flex-row justify-content-center align-items-center">
-                        <ul className="d-flex gap-4 flex-row justify-content-center align-items-center m-0 text-bold">
-                            <li className='nav-link '><Link to='/' className='fs-3 text-light text-decoration-none'>HOME</Link></li>
-                            <li className='nav-link'><Link to='/protests' className='text-light fs-3 text-decoration-none'>PROTESTS</Link></li>
-                            <li className='nav-link'><Link to='/admin' className='text-light fs-3 text-decoration-none'>ADMINISTRATOR</Link></li>
-                            <li className='nav-link'><Link to='/post-protests' className='text-light fs-3 text-decoration-none'>POST PROTESTS</Link></li>
-                        </ul>
+
+                        {
+                            (userData !== null && userData.user_privileges == 'administrator') ?
+                                <ul className="d-flex gap-4 flex-row justify-content-center align-items-center m-0 text-bold">
+                                    <li className='nav-link'><Link to='/admin' className='text-light fs-3 text-decoration-none'>ADMIN DASHBOARD</Link></li>
+                                </ul>
+                                :
+                                <ul className="d-flex gap-4 flex-row justify-content-center align-items-center m-0 text-bold">
+                                    <li className='nav-link '><Link to='/' className='fs-3 text-light text-decoration-none'>HOME</Link></li>
+                                    <li className='nav-link'><Link to='/protests' className='text-light fs-3 text-decoration-none'>PROTESTS</Link></li>
+                                    {
+                                        isAuthenticated && userData.user_privileges !== 'volunteer' ? <li className='nav-link'><Link to='/post-protests' className='text-light fs-3 text-decoration-none'>POST PROTESTS</Link></li>
+                                            : null
+                                    }
+
+                                </ul>
+                        }
+
+
                     </div>
                     {!isAuthenticated ?
                         <div className="d-flex gap-4 flex-row">
@@ -37,7 +50,7 @@ const Navbar = () => {
                 </div>
             </div>
 
-        </nav>
+        </nav >
     )
 }
 

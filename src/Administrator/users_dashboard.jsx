@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { userCategories } from './data';
-import { AppContext } from '../Contexts/AuthContext';
+import { Link } from 'react-router-dom';
 
 
 function UserDashboard() {
     const [users, setUsers] = useState([]);
     const [displayedUsers, setDisplayedUsers] = useState([]);
     const [tabIndex, setTabIndex] = useState(0);
-    // const [verifiedCount, setVerifiedCount] = useState(0);
+    const [verifiedCount, setVerifiedCount] = useState(0);
     // const [unverifiedCount, setUnverifiedCount] = useState(0);
 
 
@@ -16,6 +16,7 @@ function UserDashboard() {
         try {
             const response = await fetch(url, {
                 method: 'GET',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -36,16 +37,19 @@ function UserDashboard() {
     };
 
     // an array of methods for the btns
-    const filterBanned =()=>{
-        const filteredArray = users.filter((obj)=> obj.is_banned)
+    const filterBanned = () => {
+        const filteredArray = users.filter((obj) => obj.is_banned)
         setDisplayedUsers(filteredArray)
+        setVerifiedCount(filteredArray.length)
     }
-    const filterNotBanned =()=>{
-        const filteredArray = users.filter((obj)=> !obj.is_banned)
+    const filterNotBanned = () => {
+        const filteredArray = users.filter((obj) => !obj.is_banned)
         setDisplayedUsers(filteredArray)
+        setVerifiedCount(users.length - filteredArray.length)
     }
 
-    const methods= [filterNotBanned,filterBanned]
+    const countValues = [(users.length - verifiedCount), verifiedCount]
+    const methods = [filterNotBanned, filterBanned]
     useEffect(() => {
         methods[tabIndex]();
     }, [tabIndex]);
@@ -59,10 +63,11 @@ function UserDashboard() {
         methods[tabIndex]();
     }, [users]);
     async function toggleBan(userId, is_banned) {
-        const url = `http://127.0.0.1:8000/user/updateUser`;
+        const url = `http://127.0.0.1:8000/api/updateUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -103,11 +108,11 @@ function UserDashboard() {
     const DashCard = (props) => {
         return (
             <div
-                className='w-100 gap-3 btn btn-light rounded-2 border-secondary d-flex flex-column pt-2 px-4 tas ais'
+                className={`w-100 gap-3 btn btn-light rounded-2 border-secondary d-flex flex-column pt-2 px-4 tas ais ${tabIndex == props.index ? 'bg-secondary' : ''} `}
                 onClick={props.method}
             >
                 <h3 className='fs-3 w-100'>{props.title}</h3>
-                <h1 className='display-5 text-secondary-green text-bold'>{props.index}</h1>
+                <h1 className={`display-4 ${props.index == tabIndex ? 'text-secondary-green ' : 'text-dark'}  text-bold`}>{countValues[props.index]}</h1>
             </div>
         );
     };
@@ -116,7 +121,11 @@ function UserDashboard() {
 
     return (
         <div className='w-75 d-flex flex-column py-4'>
-            <h1 className='display-3'>USERS</h1>
+            <div className="w-100 d-flex flex-row aic jsb">
+                <h2 className="display-3 pt-3">VOLUNTEERS</h2>
+                <Link to={'/admin-registration'}>            <button className="btn btn-outline-dark rounded-1">ADD NEW USER</button>
+                </Link>
+            </div>
             <div className='d-flex flex-row py-4 gap-4'>
                 {userCategories.map((category, index) => {
                     return (
@@ -165,8 +174,8 @@ function UserDashboard() {
                                     <td className='fs-3'>{user.email}</td>
                                     <td className='fs-3 tac'>{10}</td>
                                     <td className='fs-3 tac'>{user.role}</td>
-                                 
-                                    
+
+
                                     <td>
                                         <div className='d-flex flex-row-reverse jcc aic gap-4'>
                                             <button
@@ -192,7 +201,7 @@ function UserDashboard() {
                             );
                         })}
                     </tbody>
-                </table>admin
+                </table>
             </div>
         </div>
     );

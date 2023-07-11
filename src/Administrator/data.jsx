@@ -1,8 +1,6 @@
 export const volunteerCategories = [
     'All Verified Ushers',
-    'Peace Usher Applications',
-    'Volunteer Requests',
-    'Rejected Applications'
+    'Unverified Ushers'
 ]
 
 export const userCategories = [
