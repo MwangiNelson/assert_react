@@ -122,7 +122,7 @@ function UserDashboard() {
     return (
         <div className='w-75 d-flex flex-column py-4'>
             <div className="w-100 d-flex flex-row aic jsb">
-                <h2 className="display-3 pt-3">VOLUNTEERS</h2>
+                <h2 className="display-3 pt-3">USERS/PROTESTORS</h2>
                 <Link to={'/admin-registration'}>            <button className="btn btn-outline-dark rounded-1">ADD NEW USER</button>
                 </Link>
             </div>

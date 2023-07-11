@@ -6,6 +6,38 @@ export const ProtestCard = (props) => {
     const [isVolunteer, setIsVolunteer] = useState(false)
     const { userData } = useContext(AppContext)
 
+    const volunteerAsUsher = async (protest_id) => {
+        if (!isVolunteer) {
+            return
+        }
+
+        const url = `http://127.0.0.1:8000/api/volunteer/usher`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    volunteer_id: userData.user_token,
+                    protest_id: protest_id
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert(data.message)
+
+            } else {
+                console.log('Data could not be fetched.');
+                return false;
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            return false;
+        }
+    }
+
     useEffect(() => {
         (userData !== null && userData.user_privileges == 'volunteer') ? setIsVolunteer(true) : setIsVolunteer(false)
     }, [userData])
@@ -35,6 +67,7 @@ export const ProtestCard = (props) => {
                             {
                                 isVolunteer ? <button
                                     className={`btn my-2 gap-4 rounded-1 p-2 px-3 m-0 d-flex btn-outline-info jcc aic ${props.selected == props.index ? 'w-50 ' : 'w-75'} `}
+                                    onClick={() => { volunteerAsUsher(props.protest_id) }}
                                 >
                                     VOLUNTEER TO USHER
                                 </button> : null

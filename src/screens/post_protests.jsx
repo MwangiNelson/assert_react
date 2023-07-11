@@ -21,9 +21,9 @@ function PostProtests() {
         }
 
         if (postProtests(protestData)) {
-            alert('successful post')
+            alert('Protest posted successfully, waiting approval...')
         } else {
-            alert('failed post')
+            alert('Post failed')
         }
 
 

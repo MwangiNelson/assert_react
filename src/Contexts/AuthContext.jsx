@@ -67,7 +67,8 @@ export const AppProvider = ({ children }) => {
             if (response.ok) {
                 const data = await response.json();
                 setUserData(data.data.user);
-                console.log('Registration successful:', data.user.username);
+                alert(`Registration successful ${data.data.user.username}`);
+                window.location.href = '/';
 
                 return true
             } else {
@@ -106,7 +107,7 @@ export const AppProvider = ({ children }) => {
         }
     };
 
-    const loginUser = async (email, password) => {
+    const loginUser = async (userData) => {
         const url = `http://127.0.0.1:8000/api/user/login`;
 
         try {
@@ -115,23 +116,22 @@ export const AppProvider = ({ children }) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    email,
-                    password,
-                }),
+                body: JSON.stringify(userData),
             });
 
             if (response.ok) {
                 const data = await response.json();
                 setUserData(data.data.user);
                 console.log('Login successful:', data);
-
+                alert('User login successfully')
+                window.location.href = '/';
                 return true
             } else {
-                console.log('Login failed.');
+                alert('Login failed.');
             }
         } catch (error) {
             console.log('Error:', error);
+            alert(`Login failed with this error:${error}`)
         }
     };
 
@@ -152,10 +152,10 @@ export const AppProvider = ({ children }) => {
 
                 return true
             } else {
-                console.log('Data could not be fetched.');
+                alert('Data could not be fetched.');
             }
         } catch (error) {
-            console.log('Error:', error);
+            alert('Error:', error);
         }
     };
 
@@ -220,6 +220,7 @@ export const AppProvider = ({ children }) => {
         setUserData(null)
         setIsAuthenticated(false)
         sessionStorage.removeItem('userData');
+        window.location.href = '/';
     }
 
     const contextValue = {

@@ -111,6 +111,9 @@ body {
 .jsb {
   justify-content: space-between;
 }
+.vh-100-min{
+  min-height: 100vh;
+}
 
 @keyframes animateEntry {
   0% {

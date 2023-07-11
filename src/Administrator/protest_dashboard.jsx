@@ -141,7 +141,8 @@ function ProtestDashboard() {
                   >
 
                     {(props.is_validated == 1) ? 'INVALIDATE' : 'VALIDATE'}
-                    <i className="fa-solid fa-book "></i>
+                    {(props.is_validated == 1) ? <i className="fa-solid fa-xmark"></i> : <i className="fa-solid fa-check"></i>}
+                    
                   </button>
                 </div>
 

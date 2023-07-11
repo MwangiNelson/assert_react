@@ -34,7 +34,7 @@ function Protests() {
 
 
     return (
-        <div className="w-100 d-flex flex-row justify-content-center bg-primary-green vh-100 animate-in">
+        <div className="w-100 d-flex flex-row justify-content-center bg-primary-green vh-100-min animate-in">
             <div className="w-75 d-flex flex-column align-items-center pt-4">
                 <h1 className="display-1 text-light mt-4">JOIN THE MOVEMENT <b className='text-success'>.</b></h1>
                 <p className="text-secondary fs-4 mb-4">Join other people who seek change in our society in a peaceful way for the benefit of us all</p>
@@ -49,7 +49,7 @@ function Protests() {
                                         <ProtestCard
                                             key={index}
                                             index={index}
-                                            protest_id = {protest.protest_id}
+                                            protest_id={protest.protest_id}
                                             title={protest.title}
                                             venue={protest.venue}
                                             date={protest.event_date}

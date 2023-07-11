@@ -10,10 +10,12 @@ function Login(props) {
   function handleLogin(e) {
     e.preventDefault();
 
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
+    const loginData = {
+      email: emailRef.current.value,
+      password: passwordRef.current.value,
+    }
 
-    loginUser(email, password)
+    loginUser(loginData)
 
     passwordRef.current.value = '';
     emailRef.current.value = '';

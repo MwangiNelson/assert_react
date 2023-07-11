@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { volunteerCategories } from './data';
-import { AppContext } from '../Contexts/AuthContext';
 import { Link } from 'react-router-dom';
 
 function VolunteerDashboard() {
@@ -49,8 +48,10 @@ function VolunteerDashboard() {
         setVerifiedCount(ushers.length - filteredArray.length)
     };
 
+ 
+
     // an array of methods for the btns
-    const methods = [getVerified, getUnverified, getVerified, getUnverified];
+    const methods = [getVerified, getUnverified];
     const countValues = [verifiedCount, unverifiedCount, verifiedCount, unverifiedCount]
     useEffect(() => {
         methods[tabIndex]();
