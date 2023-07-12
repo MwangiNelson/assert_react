@@ -154,3 +154,10 @@ body {
   height: 3vw;
   object-fit: contain;
 }
+.vh-25 {
+  height: 25vh;
+  min-height: 25vh;
+}
+.border-dashed {
+  border-style: dashed !important;
+}

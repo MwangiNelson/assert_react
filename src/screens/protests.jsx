@@ -1,14 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { Loader, ProtestCard } from '../components/features'
+import { Loader, ProtestCard, ProtestPost } from '../components/features'
 import axios from 'axios';
 
 function Protests() {
     const [loading, setLoading] = useState(true)
     const [protests, setProtests] = useState(null)
     const [selected, setSelected] = useState(null)
+    const [sharePost, setSharePost] = useState(false)
 
     const toggleDescription = (index) => {
         (index == selected) ? setSelected(null) : setSelected(index)
+    }
+
+    const toggleSet = () => {
+        console.log('toggled')
+        setSharePost(!sharePost)
+        console.log(sharePost)
     }
 
     const fetchProtests = async () => {
@@ -35,6 +42,7 @@ function Protests() {
 
     return (
         <div className="w-100 d-flex flex-row justify-content-center bg-primary-green vh-100-min animate-in">
+            {sharePost ? <ProtestPost closeMethod = {toggleSet} /> : null}
             <div className="w-75 d-flex flex-column align-items-center pt-4">
                 <h1 className="display-1 text-light mt-4">JOIN THE MOVEMENT <b className='text-success'>.</b></h1>
                 <p className="text-secondary fs-4 mb-4">Join other people who seek change in our society in a peaceful way for the benefit of us all</p>
@@ -56,6 +64,7 @@ function Protests() {
                                             description={protest.description}
                                             selected={selected}
                                             method={toggleDescription}
+                                            postMethod = {toggleSet}
                                         />
                                     )
                                 }) : <div className='w-100 bg-warning p-2 border tac text-secondary rounded-1'>
