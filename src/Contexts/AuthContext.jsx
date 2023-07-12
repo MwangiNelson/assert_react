@@ -187,6 +187,31 @@ export const AppProvider = ({ children }) => {
         }
     };
 
+    const updateUser = async (userData) => {
+        const url = `http://127.0.0.1:8000/api/updateUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                alert('User updated successfully');
+            } else {
+                alert('User could not be updated.');
+                return false;
+            }
+        } catch (error) {
+            console.log('Error:', error);
+            return false;
+        }
+    }
+
     const registerVolunteer = async (volunteerData) => {
         const url = `http://127.0.0.1:8000/api/volunteer/register`;
 
@@ -234,6 +259,7 @@ export const AppProvider = ({ children }) => {
         setVisible,
         postProtests,
         registerVolunteer,
+        updateUser,
         logout
 
     };
