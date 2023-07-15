@@ -40,6 +40,7 @@ function Protests() {
 
 
 
+
     return (
         <div className="w-100 d-flex flex-row justify-content-center bg-primary-green vh-100-min animate-in">
             {sharePost ? <ProtestPost closeMethod = {toggleSet} /> : null}

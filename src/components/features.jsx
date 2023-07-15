@@ -1,46 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { AppContext } from '../Contexts/AuthContext'
+import { Link } from 'react-router-dom'
 import './loader.css'
+import axios from 'axios'
 
 export const ProtestCard = (props) => {
-    const [isVolunteer, setIsVolunteer] = useState(false)
-    const { userData } = useContext(AppContext)
-
-    const volunteerAsUsher = async (protest_id) => {
-        if (!isVolunteer) {
-            return
-        }
-
-        const url = `http://127.0.0.1:8000/api/volunteer/usher`;
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    volunteer_id: userData.user_token,
-                    protest_id: protest_id
-                })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                alert(data.message)
-
-            } else {
-                console.log('Data could not be fetched.');
-                return false;
-            }
-        } catch (error) {
-            console.log('Error:', error);
-            return false;
-        }
-    }
-
-    useEffect(() => {
-        (userData !== null && userData.user_privileges == 'volunteer') ? setIsVolunteer(true) : setIsVolunteer(false)
-    }, [userData])
 
     return (
         <div className={`${props.selected == props.index ? 'w-100' : 'w-50'} p-3 d-flex flex-row`}>
@@ -56,37 +20,18 @@ export const ProtestCard = (props) => {
                             <h4 className='text-capitalize d-flex gap-1'>Venue <b className='font-primary text-primary text-bold'>:</b> <b className='text-primary'>{props.venue.toString().toLowerCase()}</b></h4>
                             <h4 className='text-capitalize d-flex gap-1'>Date <b className='font-primary text-primary text-bold'>:</b> <b className='text-primary justify-content-center d-flex'>{props.date}</b></h4>
                             <div className="w-100 d-flex gap-2 flex-row">
-                                <button
-                                    className={`btn gap-4 rounded-1 p-2 px-3 m-0 d-flex jcc aic ${props.selected == props.index ? 'w-50 btn-outline-secondary ' : 'w-50 btn-outline-success '} `}
-                                    onClick={() => { props.method(props.index) }}
-                                >
-                                    {props.selected == props.index ? 'SHOW LESS' : 'SHOW MORE'}
-                                    {props.selected == props.index ? <i className="fa-solid fa-angle-left fs-5"></i> : <i className="fa-solid fa-angle-right fs-5"></i>}
+                                <Link to={`/protests/${props.protest_id}`}>
+                                    <button
+                                        className={`btn gap-4 rounded-1 p-2 px-3 m-0 d-flex jcc aic w-100 btn-outline-success`}
+                                    >
+                                        SHOW MORE
+                                        <i className="fa-solid fa-angle-right fs-5"></i>
+                                    </button>
+                                </Link>
 
-                                </button>
-                                <button className="w-50 btn btn-outline-info"
-                                    onClick={() => { props.postMethod() }}
-                                >
-                                    SHARE POST
-                                    <i className="fa-solid fa-share ps-2"></i>
-                                </button>
                             </div>
-
-                            {
-                                isVolunteer ? <button
-                                    className={`btn my-2 gap-4 rounded-1 p-2 px-3 m-0 d-flex btn-outline-info jcc aic ${props.selected == props.index ? 'w-50 ' : 'w-75'} `}
-                                    onClick={() => { volunteerAsUsher(props.protest_id) }}
-                                >
-                                    VOLUNTEER TO USHER
-                                </button> : null
-                            }
-
-
                         </div>
-                        <div className="w-75 text-secondary tas animate-down" style={{ display: (props.selected == props.index) ? '' : 'none', overflow: 'hidden' }} >
-                            <h3 className="fs-2 text-dark border-0 border-bottom">Event Description</h3>
-                            <p className='tas m-0 '>{props.description}</p>
-                        </div>
+
                     </div>
 
 
@@ -109,6 +54,14 @@ export const LoaderGreen = () => {
     return (
         <div className="w-100 py-3 d-flex justify-content-center align-items-center">
             <div className="lds-facebook lds-facebook-green"><div></div><div></div><div></div></div></div >
+    )
+}
+
+export const PhotoLoader = ()=>{
+    return(
+        <div className="rounded-1 w-100 d-flex jcc aic bg-blur bg-semi-dark h-100 position-absolute z-top">
+            <div className="loader"></div>
+        </div>
     )
 }
 
@@ -136,6 +89,163 @@ export const ProtestPost = (props) => {
                 </div>
                 <button className="btn btn-primary w-50">POST</button>
 
+            </div>
+        </div>
+    )
+}
+
+export const CommentCard = (props) => {
+    const [editMode, setEditMode] = useState(false)
+
+    function formatDateTime(datetime) {
+        const formattedDate = new Date(datetime).toLocaleDateString();
+        const formattedTime = new Date(datetime).toLocaleTimeString([], {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+
+        return `${formattedDate} (${formattedTime})`;
+    }
+
+    console.log(props.comment_id)
+    return (
+        <div className="w-100 d-flex flex-row">
+            {editMode ? <CommentEditCard
+                comment={props.comment}
+                fetchMethod={props.fetchMethod}
+                toggleMethod={() => { setEditMode(!editMode) }}
+                protest_id={props.protest_id}
+                comment_id={props.comment_id}
+            /> : null}
+            <div className="d-flex flex-row ais gap-4 border p-2 ps-3 btn btn-light jcs rounded-1">
+                <img src="/images/chat.png" alt="" className='user-img' />
+
+                <div className="d-flex flex-column">
+                    <p className='fs-4 text-secondary m-0 p-0 tas'>{props.comment}</p>
+                    <p className='font-tertiary w-100 d-flex flex-row-reverse pe-4'>Posted on {formatDateTime(props.date)}</p>
+                </div>
+            </div>
+            {
+                props.isAuthor ?
+                    <div className="d-flex flex-column-reverse px-3 gap-2">
+                        <button className="btn btn-danger rounded-1"
+                            onClick={props.deleteMethod}
+                        ><i className="fa-solid fa-trash-can p-0 m-0 fs-4"></i></button>
+                        <button
+                            className="btn btn-warning rounded-1"
+                            onClick={() => { setEditMode(!editMode) }}
+                        ><i className="fa-solid fa-pen p-0 m-0 fs-4"></i></button>
+                    </div> : null}
+        </div>
+    )
+}
+
+export const CommentForm = (props) => {
+
+    const commentRef = useRef('')
+
+    async function postComment(e, protest_id, fetchMethod) {
+        e.preventDefault()
+
+        const commentData = {
+            protest_id: protest_id,
+            comment: commentRef.current.value,
+        }
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/comment', commentData);
+            alert('Comment posted successfully');
+            commentRef.current.value = ''
+            fetchMethod(protest_id)
+
+        } catch (error) {
+            console.log('Error posting comment:', error);
+        }
+    }
+
+    return (
+        <div className="w-100 d-flex jcc aic bg-blur vh-100 position-fixed top-0 start-0 animate-in">
+            <div className="w-50 rounded bg-light p-4 shadow-lg d-flex flex-column">
+                <div className="d-flex flex-row border-0 border-bottom border-dark mb-3 jsb aic pb-1">
+                    <h1 className="fs-1 text-dark m-0">
+                        COMMENT EDITOR
+                    </h1>
+                    <button
+                        className="btn btn-dark rounded-1"
+                        onClick={props.toggleMethod}
+                    >
+                        <img src="/images/cancel.png" className='inverted' alt="" />
+                    </button>
+                </div>
+                <form className='w-100 d-flex flex-column gap-2' onSubmit={(e) => { postComment(e, props.protest_id, props.fetchMethod) }}>
+                    <label htmlFor="" className='font-tertiary'>Post comment:</label>
+                    <textarea ref={commentRef} rows="3" className='form-control fs-3' minLength={50} placeholder='Post your comment here' ></textarea>
+                    <button className="btn btn-primary w-25 fs-4">POST COMMENT</button>
+                </form>
+            </div>
+        </div>
+    )
+}
+
+export const CommentEditCard = (props) => {
+
+    const [comment, setComment] = useState(props.comment);
+    const handleCommentChange = (e) => {
+        setComment(e.target.value);
+    };
+
+    console.log('Comment Id',props.comment_id)
+    async function editComment(e, protest_id, comment_id, fetchMethod) {
+        e.preventDefault()
+
+        const commentData = {
+            id: comment_id,
+            protest_id: protest_id,
+            comment: comment,
+            
+        }
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/editComment', commentData);
+            alert('Comment posted successfully');
+            fetchMethod(protest_id)
+
+        } catch (error) {
+            console.log('Error posting comment:', error);
+        }
+    }
+
+    return (
+        <div className="w-100 d-flex jcc aic bg-blur vh-100 position-fixed top-0 start-0 animate-in">
+            <div className="w-50 rounded bg-light p-4 shadow-lg d-flex flex-column">
+                <div className="d-flex flex-row border-0 border-bottom border-dark mb-3 jsb aic pb-1">
+                    <h1 className="fs-1 text-dark m-0">
+                        COMMENT EDITOR
+                    </h1>
+                    <button
+                        className="btn btn-dark rounded-1"
+                        onClick={props.toggleMethod}
+                    >
+                        <img src="/images/cancel.png" className='inverted' alt="" />
+                    </button>
+                </div>
+                <form
+                    className='w-100 d-flex flex-column gap-2'
+                    onSubmit={
+                        (e) => {
+                            editComment(e, props.protest_id, props.comment_id, props.fetchMethod)
+                        }}
+                >
+                    <label htmlFor="" className='font-tertiary'>Edit comment:</label>
+                    <textarea
+                        rows="3"
+                        className='form-control fs-3'
+                        onChange={handleCommentChange}
+                        minLength={50}
+                        value={comment} ></textarea>
+                    <button className="btn btn-primary w-25 fs-4">SAVE <i className="fa-solid fa-floppy-disk ps-3"></i></button>
+                </form>
             </div>
         </div>
     )

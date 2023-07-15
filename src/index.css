@@ -13,6 +13,9 @@
 * {
   font-family: var(--secondary-font);
 }
+a {
+  text-decoration: none;
+}
 body {
   width: 100vw;
   max-width: 100%;
@@ -161,3 +164,15 @@ body {
 .border-dashed {
   border-style: dashed !important;
 }
+.inverted {
+  width: 2vw;
+  filter: invert(100%);
+}
+.bg-semi-dark {
+  background: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.4) 0%,
+      rgba(0, 0, 0, 0.4) 100%
+    )
+}
+

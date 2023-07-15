@@ -9,6 +9,7 @@ import PostProtests from "../screens/post_protests";
 import SignUpVolunteer from "../Volunteer/signup";
 import AdminPanel from "../Administrator/admin";
 import AdminRegistration from "../Administrator/registration";
+import ProtestView from "../screens/protest_view";
 // import ProtestView from "../screens/protest_view";
 
 
@@ -30,6 +31,7 @@ export const NavigationRoutes = () => {
                 path="/post-protests"
                 element={isAuthenticated && userData.user_privileges !== 'volunteer' ? <PostProtests /> : <Home />}
             />
+            <Route path="/protests/:protestId" element={<ProtestView />} />
             <Route path="/register-volunteer" element={<SignUpVolunteer />} />
         </Routes>
     );
