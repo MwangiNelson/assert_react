@@ -18,6 +18,7 @@ function ProtestView() {
   const [photoLoading, setPhotoLoading] = useState(false)
   const [commentMode, setCommentMode] = useState(null)
   const [previewUrl, setPreviewUrl] = useState('');
+  const [assigned, setAssigned] = useState(false)
   const imageRef = useRef(null)
 
   const fetchProtest = async (protestId) => {
@@ -34,6 +35,24 @@ function ProtestView() {
       setLoading(false)
     }
   };
+
+  const isPosted = async () => {
+    if (isVolunteer) {
+      try {
+
+        const requestData = {
+          protest_id: protestId,
+          volunteer_id: userData.user_token
+        }
+        const response = await axios.post(`http://127.0.0.1:8000/api/checkRequest`, requestData);
+        (response.data.data == 1) ? setAssigned(true) : setAssigned(false)
+        console.log('Posted state', assigned)
+
+      } catch (error) {
+        console.error()
+      }
+    }
+  }
 
   const volunteerAsUsher = async (protestId) => {
     if (!isVolunteer) {
@@ -64,6 +83,23 @@ function ProtestView() {
     } catch (error) {
       console.log('Error:', error);
       return false;
+    }
+  }
+
+  const cancelVolunteer = async () => {
+    if (isVolunteer) {
+      try {
+
+        const requestData = {
+          protest_id: protestId,
+          volunteer_id: userData.user_token
+        }
+        const response = await axios.post(`http://127.0.0.1:8000/api/cancelVolunteer`, requestData);
+        isPosted()
+
+      } catch (error) {
+        console.error()
+      }
     }
   }
 
@@ -134,6 +170,8 @@ function ProtestView() {
   useEffect(() => {
     (userData !== null && userData.user_privileges == 'volunteer') ? setIsVolunteer(true) : setIsVolunteer(false);
     (userData !== null) ? checkIsAuthor() : null;
+    (userData !== null) ? isPosted() : null;
+
   }, [protest])
 
   function triggerFileInput() {
@@ -170,7 +208,7 @@ function ProtestView() {
             </div>
             <div className="w-50 d-flex flex-row py-3 jcc gap-2">
               {
-                isAuthenticated && !isAuthor ?
+                isAuthenticated && !isAuthor && !isVolunteer ?
                   <button className="btn btn-success shadow-lg w-25 px-4 py-2 rounded-1 font-tertiary text-bold shadow-light fs-5">
                     SUBSCRIBE
                     <i className="fa-regular fa-calendar-plus ps-3"></i>
@@ -183,7 +221,7 @@ function ProtestView() {
                   </button> : null
               }
               {
-                isAuthor ?
+                isAuthor || isAuthenticated ?
                   <button
                     className="btn btn-warning px-4 py-2 rounded-1 font-tertiary text-bold border-light fs-5"
                     onClick={() => { setCommentMode(!commentMode) }}
@@ -193,13 +231,33 @@ function ProtestView() {
                   </button> : null
               }
               {
-                isVolunteer ?
+                isVolunteer && !assigned ?
                   <button
                     className="btn btn-info px-4 py-2 rounded-1 font-tertiary text-bold shadow-lg fs-5"
                     onClick={() => volunteerAsUsher(protestId)}
                   >
                     VOLUNTEER TO USHER
-                    <i class="fa-regular fa-calendar-plus ps-3"></i>
+                    <i className="fa-regular fa-calendar-plus ps-3"></i>
+                  </button> : null
+              }
+              {
+                isVolunteer && assigned ?
+                  <button
+                    className="btn btn-danger px-4 py-2 rounded-1 font-tertiary text-bold shadow-lg fs-5"
+                    onClick={() => cancelVolunteer()}
+                  >
+                    CANCEL VOLUNTEER REQUEST
+                    <i className="fa-regular fa-trash-can ps-3"></i>
+                  </button> : null
+              }
+              {
+                isVolunteer && assigned ?
+                  <button
+                    className="btn btn-danger px-4 py-2 rounded-1 font-tertiary text-bold shadow-lg fs-5"
+                    onClick={() => alertWarning(protestId)}
+                  >
+                    ALERT WARNING
+                    <i className="fa-solid fa-warning ps-3"></i>
                   </button> : null
               }
             </div>
