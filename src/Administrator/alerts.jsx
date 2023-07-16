@@ -53,7 +53,7 @@ function Alerts() {
                     ALERTS
                 </h1>
                 {
-                    alerts !== null && alerts !== [] ?
+                    alerts !== null && alerts != [] ?
                         alerts.map((alert, index) => {
                             return (
                                 <AlertCard
