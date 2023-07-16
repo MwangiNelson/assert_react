@@ -10,6 +10,7 @@ import SignUpVolunteer from "../Volunteer/signup";
 import AdminPanel from "../Administrator/admin";
 import AdminRegistration from "../Administrator/registration";
 import ProtestView from "../screens/protest_view";
+import Alerts from "../Administrator/alerts";
 // import ProtestView from "../screens/protest_view";
 
 
@@ -22,6 +23,8 @@ export const NavigationRoutes = () => {
         <Routes>
             <Route path="/" element={(userData !== null && userData.user_privileges == 'administrator') ? <AdminPanel /> : <Home />} />
             <Route path="/admin" element={(userData !== null && userData.user_privileges == 'administrator') ? <AdminPanel /> : <AuthWrapper />} />
+            <Route path="/alerts" element={(userData !== null && userData.user_privileges == 'administrator') ? <Alerts /> : <AuthWrapper />} />
+
             <Route path="/admin-registration" element={(userData !== null && userData.user_privileges == 'administrator') ? <AdminRegistration /> : <Home />} />
 
             {/* {/* <Route path="/contact" element={<Contact />} /> */}

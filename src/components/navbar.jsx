@@ -16,6 +16,7 @@ const Navbar = () => {
                             (userData !== null && userData.user_privileges == 'administrator') ?
                                 <ul className="d-flex gap-4 flex-row justify-content-center align-items-center m-0 text-bold">
                                     <li className='nav-link'><Link to='/admin' className='text-light fs-3 text-decoration-none'>ADMIN DASHBOARD</Link></li>
+                                    <li className='nav-link'><Link to='/alerts' className='text-light fs-3 text-decoration-none'>ALERTS</Link></li>
                                 </ul>
                                 :
                                 <ul className="d-flex gap-4 flex-row justify-content-center align-items-center m-0 text-bold">

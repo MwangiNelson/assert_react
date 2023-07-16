@@ -54,6 +54,22 @@ function ProtestView() {
     }
   }
 
+  const alertAuth = async () => {
+    if (isVolunteer || isAuthor) {
+      try {
+
+        const requestData = {
+          protest_id: protestId,
+          volunteer_id: userData.user_token
+        }
+        const response = await axios.post(`http://127.0.0.1:8000/api/alert`, requestData);
+        alert(response.data.message)
+
+      } catch (error) {
+        console.error()
+      }
+    }
+  }
   const volunteerAsUsher = async (protestId) => {
     if (!isVolunteer) {
       return
@@ -251,10 +267,10 @@ function ProtestView() {
                   </button> : null
               }
               {
-                isVolunteer && assigned ?
+                isVolunteer && assigned || isAuthor ?
                   <button
                     className="btn btn-danger px-4 py-2 rounded-1 font-tertiary text-bold shadow-lg fs-5"
-                    onClick={() => alertWarning(protestId)}
+                    onClick={() => alertAuth()}
                   >
                     ALERT WARNING
                     <i className="fa-solid fa-warning ps-3"></i>
